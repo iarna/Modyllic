@@ -1151,7 +1151,7 @@ class Modyllic_Generator_PHP {
                  ->add_const('PDO::FETCH_NUM')
                ->end_method()
              ->end_assign();
-        $this->method('sth','closeCursor');
+        $this->call_closeCursor();
         $this->end_txns($routine);
         $this->add_return('result');
         return $this;
@@ -1239,7 +1239,7 @@ class Modyllic_Generator_PHP {
                  ->proc_fetch_row_type($routine)
                ->end_method()
              ->end_assign();
-        $this->method('sth','closeCursor');
+        $this->call_closeCursor();
         $this->end_txns($routine);
         $this->add_return('result');
         return $this;
@@ -1250,7 +1250,7 @@ class Modyllic_Generator_PHP {
                  ->proc_fetch_row_type($routine)
                ->end_method()
              ->end_assign();
-        $this->method('sth','closeCursor');
+        $this->call_closeCursor();
         $this->begin_cmd( 'if ( ' )
                ->add_var('row')
              ->end_cmd(' === false ) {')
@@ -1292,7 +1292,7 @@ class Modyllic_Generator_PHP {
                  ->index( 'row', $routine->returns['column'] )
                ->end_assign()
              ->end_while();
-        $this->method('sth','closeCursor');
+        $this->call_closeCursor();
         $this->end_txns($routine);
         $this->add_return( 'results' );
         return $this;
@@ -1303,7 +1303,7 @@ class Modyllic_Generator_PHP {
                  ->proc_fetch_row_type($routine)
                 ->end_method()
              ->end_assign();
-        $this->method('sth','closeCursor');
+        $this->call_closeCursor();
         $this->end_txns($routine);
         $this->add_return( 'table' );
         return $this;
@@ -1343,7 +1343,7 @@ class Modyllic_Generator_PHP {
         }
           $this->end_cmd('',';')
              ->end_while();
-        $this->method('sth','closeCursor');
+        $this->call_closeCursor();
         $this->end_txns($routine);
         $this->add_return('map');
         return $this;
@@ -1354,9 +1354,14 @@ class Modyllic_Generator_PHP {
         return $this;
     }
     function proc_returns_none(Modyllic_Schema_Routine $routine) {
-        $this->method('sth','closeCursor');
+        $this->call_closeCursor();
         $this->end_txns($routine);
         return $this;
     }
+
+    function call_closeCursor() {
+        return $this->method('sth','closeCursor');
+    }
+
 }
 
