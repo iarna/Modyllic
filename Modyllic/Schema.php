@@ -142,6 +142,9 @@ class Modyllic_Schema extends Modyllic_Diffable {
                     break;
                 case 'COLUMN':
                     list($table,$col) = explode(".",$which);
+                    if ( $col == 'column_defined' ) {
+                        $col = 'inferred';
+                    }
                     if ( isset($this->tables[$table]) and isset($this->tables[$table]->columns[$col]) ) {
                         $obj = $this->tables[$table]->columns[$col];
                     }

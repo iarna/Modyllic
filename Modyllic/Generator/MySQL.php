@@ -106,8 +106,11 @@ class Modyllic_Generator_MySQL extends Modyllic_Generator_ModyllicSQL {
                 $meta["weak"] = $index->weak;
             }
         }
-        if ( $index->column_defined ) {
-            $meta["column_defined"] = $index->column_defined;
+        if ( $index->inferred ) {
+            $meta["inferred"] = $index->inferred;
+        }
+        if ( $index->inferred_by != "" ) {
+            $meta["inferred_by"] = $index->inferred_by;
         }
         return $meta;
     }

@@ -717,7 +717,7 @@ class Modyllic_Generator_ModyllicSQL {
     }
 
     function ignore_index(Modyllic_Schema_Index $index ) {
-        if ( $index->column_defined ) {
+        if ( $index->inferred ) {
             return true;
         }
         else {

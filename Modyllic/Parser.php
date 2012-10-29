@@ -1207,14 +1207,16 @@ class Modyllic_Parser {
             $index = new Modyllic_Schema_Index('!PRIMARY KEY');
             $index->primary = true;
             $index->columns = array($column->name => false);
-            $index->column_defined = true;
+            $index->inferred = true;
+            $index->inferred_by = "{$this->ctx->name}.column.{$column->name}";
             $this->add_index( $index );
         }
         else if ( $column->unique ) {
             $index = new Modyllic_Schema_Index($column->name);
             $index->unique = true;
             $index->columns = array($column->name => false);
-            $index->column_defined = true;
+            $index->inferred = true;
+            $index->inferred_by = "{$this->ctx->name}.column.{$column->name}";
             $this->add_index( $index );
         }
         return $column;
@@ -1418,6 +1420,8 @@ class Modyllic_Parser {
             }
             if ( ! $matched ) {
                 $regkey = new Modyllic_Schema_Index($name);
+                $regkey->inferred = true;
+                $regkey->inferred_by = $this->ctx->name . ".index." . $key->cname;
                 $regkey->columns = $key->columns;
                 if ( ! $regkey->name ) {
                     $this->gen_index_name($regkey);

@@ -15,7 +15,8 @@ class Modyllic_Schema_Index extends Modyllic_Diffable {
     public $dynamic_name = false;
     public $spatial = false;
     public $primary = false;
-    public $column_defined = false;
+    public $inferred = false;
+    public $inferred_by = "";
     public $fulltext = false;
     public $unique   = false;
     public $using;
