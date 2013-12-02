@@ -1,0 +1,24 @@
+#!/usr/bin/env php
+<?php
+/**
+ * Copyright © 2011 Online Buddies, Inc. - All Rights Reserved
+ *
+ * @package Modyllic
+ * @author bturner@online-buddies.com
+ */
+
+if ($lib_path = getenv("MODYLLIC_LIB_PATH")) set_include_path($lib_path.":".get_include_path());
+
+require_once "Modyllic/CommandLine.php";
+
+$args = Modyllic_CommandLine::get_args(array(
+    'description' => 'Generate a JavaScript helper class for the stored procs in the schema',
+    'options' => array(),
+    'arguments' => array(
+        'spec' => array('multiple'=>true) )));
+
+$schema = Modyllic_CommandLine::schema($args->args['spec']);
+
+$generator = new Modyllic_Generator_JS();
+
+print $generator->helpers($schema);
