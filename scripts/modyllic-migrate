@@ -116,16 +116,34 @@ foreach ( $gen->sql_header() as $sql ) {
     $dbh->exec( $sql );
 }
 
-$cmds = count($gen->sql_commands());
+$cmds = $gen->sql_commands();
+
 
 try {
-    $ii = 0;
     Modyllic_Status::$source_name = "changes into database";
     Modyllic_Status::$source_count = 1;
     Modyllic_Status::$source_index = 1;
-    foreach ($gen->sql_commands() as $cmd) {
-        Modyllic_Status::status( ++$ii, $cmds );
-        $dbh->exec($cmd);
+    $ii = 0;
+    $numcmds = count($cmds);
+    $toretry = array();
+    while (count($toretry) < count($cmds)) {
+        $errors = array();
+        foreach ($gen->sql_commands() as $cmd) {
+            Modyllic_Status::status( ++$ii, $numcmds );
+            try {
+                $dbh->exec($cmd);
+            }
+            catch (PDOException $e) {
+                $toretry[] = $cmd;
+                $errors[] = $e;
+            }
+        }
+        $numcmds += count($toretry);
+        $cmds = $toretry;
+    }
+    if (count($errors)) {
+        $cmd = $toretry[0];
+        throw $errors[0];
     }
 }
 catch (PDOException $e) {
